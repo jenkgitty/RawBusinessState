@@ -1,0 +1,38 @@
+on init
+   declare $asyncID := -1
+   declare %filter_type[6] := ($FILTER_TYPE_LDR_LP1,$FILTER_TYPE_LDR_LP2,$FILTER_TYPE_LDR_LP3,$FILTER_TYPE_LDR_LP4,$FILTER_TYPE_DAFT_LP,$FILTER_TYPE_PRO52)
+
+  declare ui_menu $Type
+  add_menu_item($Type,"Ladder LP1",0)
+  add_menu_item($Type,"Ladder LP2",1)
+  add_menu_item($Type,"Ladder LP3",2)
+  add_menu_item($Type,"Ladder LP4",3)
+  add_menu_item($Type,"Daft LP",4)
+  add_menu_item($Type,"Pro 52",5)
+
+  make_persistent($Type)
+
+  message("")
+end on
+
+on async_complete
+   if ($asyncID # -1)
+  $asyncID := -1
+  end if
+end on
+
+on ui_control ($Type)
+  $asyncID := set_engine_par($ENGINE_PAR_EFFECT_TYPE,$EFFECT_TYPE_FILTER,0,0,-1)
+  $asyncID := set_engine_par($ENGINE_PAR_EFFECT_SUBTYPE,%filter_type[$Type],0,0,-1)
+end on
+
+
+on ui_control ($SLIDER_HPF_RESO_LDRLP4)
+  set_engine_par(ENGINE_PAR_RESONANCE,$SLIDER_HPF_RESO_LDRLP4,0,0,-1)
+  set_knob_label($SLIDER_HPF_RESO_LDRLP4,get_engine_par_disp(ENGINE_PAR_RESONANCE,0,0,-1))
+end on
+
+on ui_control ($SLIDER_HPF_FREQ_LDRLP4)
+  set_engine_par($ENGINE_PAR_CUTOFF,$SLIDER_HPF_FREQ_LDRLP4,0,0,-1)
+  set_knob_label($SLIDER_HPF_FREQ_LDRLP4,get_engine_par_disp($ENGINE_PAR_CUTOFF,0,0,-1))
+end on
