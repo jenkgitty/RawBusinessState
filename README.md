@@ -1,0 +1,2 @@
+# RawBusinessState
+Learning effort
